@@ -12,7 +12,7 @@ export class Node {
     this.#id = id
   }
 
-  get getId() {
+  get id() {
     return this.#id
   }
 }

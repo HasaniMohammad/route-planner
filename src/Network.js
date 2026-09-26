@@ -70,29 +70,3 @@ export class Network {
     return connections
   }
 }
-
-const network = new Network()
-
-const nodeA = new Node('A')
-const nodeB = new Node('B')
-const nodeC = new Node('C')
-
-network.addNode(nodeA)
-network.addNode(nodeB)
-network.addNode(nodeC)
-
-network.connect('A', 'B', 20)
-network.connect('A', 'C', 10)
-
-const connections = network.getConnections('A')
-
-console.log(connections.length) // 2
-for (const connection of connections) {
-  console.log(
-    connection.startNode.id,
-    '->',
-    connection.endNode.id,
-    'cost:',
-    connection.cost
-  )
-}

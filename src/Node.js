@@ -16,4 +16,3 @@ export class Node {
     return this.#id
   }
 }
-

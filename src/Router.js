@@ -125,103 +125,89 @@ export class Router {
     return route.cost
   }
 
+  findShortestRoute(startId, endId) {
+    const startNode = this.#network.getNode(startId)
+    const endNode = this.#network.getNode(endId)
+
+    const distance = new Map()
+    const previous = new Map()
+    const visited = new Set()
+    const candidates = new Set()
+    const routeNodes = []
+
+    distance.set(startNode, 0)
+    candidates.add(startNode)
+
+    while (candidates.size > 0) {
+      let currentNode = null
+      let smallestDistance = Infinity
+
+      for (const node of candidates) {
+        if (distance.get(node) < smallestDistance) {
+          currentNode = node
+          smallestDistance = distance.get(node)
+        }
+      }
+
+      candidates.delete(currentNode)
+
+      if (currentNode === endNode) {
+        break
+      }
+
+      visited.add(currentNode)
+
+      const connections = this.#network.getConnections(currentNode.id)
+
+      //find node on other side of connection
+      for (const connection of connections) {
+        let neighbor
+
+        if (connection.startNode === currentNode) {
+          neighbor = connection.endNode
+        } else {
+          neighbor = connection.startNode
+        }
+
+        if (visited.has(neighbor)) {
+          continue
+        }
+
+        //Calculate total cost from start to this neibhor
+        const newDistance = distance.get(currentNode) + connection.cost
+
+        //Set the undiscovered neibhors distance as infinity
+        const knownDistance = distance.get(neighbor) ?? Infinity
+
+        //Did we find a cheaper way to reach this neibhor?
+        if (newDistance < knownDistance) {
+          distance.set(neighbor, newDistance)
+          previous.set(neighbor, currentNode)
+          candidates.add(neighbor)
+        }
+      }
+    }
+
+    if (!distance.has(endNode)) {
+      return null
+    }
+
+    let currentNode = endNode
+
+    while (currentNode) {
+      routeNodes.push(currentNode)
+
+      if (currentNode === startNode) {
+        break
+      }
+
+      currentNode = previous.get(currentNode)
+    }
+
+    const totalCost = distance.get(endNode)
+
+    return new Route(routeNodes.reverse(), totalCost)
+
+  }
+
 }
-
-
-
-
-
-const network = new Network()
-
-network.addNode(new Node('A'))
-network.addNode(new Node('B'))
-network.addNode(new Node('C'))
-network.addNode(new Node('D'))
-network.addNode(new Node('E'))
-
-network.connect('A', 'B', 10)
-network.connect('B', 'C', 5)
-network.connect('B', 'D', 8)
-
-const router = new Router(network)
-
-// TEST 1: A → C
-let route = router.findRoute('A', 'C')
-
-console.log(route.nodes.map(node => node.id))
-// Expected: [ 'A', 'B', 'C' ]
-
-console.log(route.cost)
-// Expected: 15
-
-
-// TEST 2: Reverse direction C → A
-route = router.findRoute('C', 'A')
-
-console.log(route.nodes.map(node => node.id))
-// Expected: [ 'C', 'B', 'A' ]
-
-console.log(route.cost)
-// Expected: 15
-
-
-// TEST 3: A → D
-route = router.findRoute('A', 'D')
-
-console.log(route.nodes.map(node => node.id))
-// Expected: [ 'A', 'B', 'D' ]
-
-console.log(route.cost)
-// Expected: 18
-
-
-// TEST 4: D → C
-route = router.findRoute('D', 'C')
-
-console.log(route.nodes.map(node => node.id))
-// Expected: [ 'D', 'B', 'C' ]
-
-console.log(route.cost)
-// Expected: 13
-
-
-// TEST 5: Same start and end
-route = router.findRoute('A', 'A')
-
-console.log(route.nodes.map(node => node.id))
-// Expected: [ 'A' ]
-
-console.log(route.cost)
-// Expected: 0
-
-
-// TEST 6: No route
-route = router.findRoute('A', 'E')
-
-console.log(route)
-// Expected: null
-
-
-// TEST 7: hasRoute
-console.log(router.hasRoute('A', 'C'))
-// Expected: true
-
-console.log(router.hasRoute('A', 'E'))
-// Expected: false
-
-
-// TEST 8: routeCost
-console.log(router.routeCost('A', 'C'))
-// Expected: 15
-
-console.log(router.routeCost('C', 'A'))
-// Expected: 15
-
-console.log(router.routeCost('A', 'D'))
-// Expected: 18
-
-console.log(router.routeCost('A', 'A'))
-// Expected: 0
-
-console.log(router.routeCost('A', 'E'))
-// Expected: null

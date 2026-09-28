@@ -1,5 +1,6 @@
 import { Node } from "./Node.js"
 export class Route {
+  // An array of nodes
   #nodes
   #cost
 

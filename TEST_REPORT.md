@@ -7,15 +7,7 @@
 -->
 
 ## Summary
-
-*Briefly describe how you tested your module, and why you chose that approach — clearly enough
-that someone else could carry out the same tests. What was hardest to test, and why?*
-
-*If you used a testing framework, you may link to its generated report or include screenshots of
-the test run here.*
-
-Answer:
- I tested the module using automated tests with Node.js's built-in `node:test`
+I tested the module using automated tests with Node.js's built-in `node:test`
 test runner and `node:assert/strict` for assertions. The tests can be run with
 `npm test`. I chose automated testing because it makes it easy to repeat the
 same tests after making changes to the module and check that existing
@@ -25,18 +17,15 @@ The module's classes are tested with both valid and invalid inputs. More complex
 routing functionality is tested using networks with different connections and
 costs.
 
+The hardest part to test was the routing functionality because there can be
+multiple valid routes between the same nodes. In particular,
+`findShortestRoute()` needed a network where the first route found was not the
+cheapest route. I tested this by creating two possible routes from A to D:
+A-B-D with a total cost of 12 and A-C-D with a total cost of 7. The test checks
+that the shortest-route algorithm returns A-C-D.
+
 
 ## Test Results
-
-**Example** (shows what a filled-in row can look like — remove this example table before
-submitting):
-
-| What was tested                                                        | How it was tested                                                                                                       | Result                                                                       |
-| ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| `Jpeg.load(path)` returns a `Picture` instance for a valid image file. | Automated unit test (Vitest): loaded `test-image.jpg` and checked that the return value had `getHeight()`/`getWidth()` methods. | ✅ Passed.                                                                    |
-| `Picture.getPixelAt(x, y)` with coordinates outside the image.         | Manual test via the Test-App's interface: entered a coordinate pair larger than the image's width/height and observed the output. | ❌ Didn't throw an error initially — fixed, now throws a clear exception. |
-
-**Your test results:**
 
 | What was tested | How it was tested | Result |
 | ---------------- | ------------------ | ------- |
@@ -74,5 +63,23 @@ submitting):
 | `Route.contains()` returns `true` for a node included in the route. | Automated unit test: created a route containing nodes A and B and checked that `contains(nodeB)` returned `true`. | ✅ Passed. |
 | `Route.contains()` returns `false` for a node not included in the route. | Automated unit test: created a route containing A and B and checked that `contains(nodeC)` returned `false`. | ✅ Passed. |
 | `Route.contains()` rejects a value that is not a `Node` instance. | Automated unit test: passed a string to `contains()` and checked that a `TypeError` was thrown. | ✅ Passed. |
+| `Router.hasRoute()` returns `true` when a route exists. | Automated test: searched for a route from A to D in a connected network and checked that `true` was returned. | ✅ Passed. |
+| `Router.hasRoute()` returns `true` when start and end are the same node. | Automated test: searched from A to A and checked that `true` was returned. | ✅ Passed. |
+| `Router.hasRoute()` returns `false` when no route exists. | Automated test: searched from A to disconnected node E and checked that `false` was returned. | ✅ Passed. |
+| `Router.hasRoute()` works in the reverse direction. | Automated test: searched from D to A in the undirected network and checked that a route was found. | ✅ Passed. |
+| `Router.findRoute()` returns a valid route and its cost. | Automated test: searched from A to D and checked that the returned route was A-B-D with total cost `12`. | ✅ Passed. |
+| `Router.findRoute()` works in the reverse direction. | Automated test: searched from D to A and checked that the returned route was D-B-A with total cost `12`. | ✅ Passed. |
+| `Router.findRoute()` handles identical start and end nodes. | Automated test: searched from A to A and checked that the route contained only A with cost `0`. | ✅ Passed. |
+| `Router.findRoute()` returns `null` when no route exists. | Automated test: searched from A to disconnected node E and checked that `null` was returned. | ✅ Passed. |
+| `Router.routeCost()` returns the cost of a found route. | Automated test: calculated the route cost from A to D and checked that `12` was returned. | ✅ Passed. |
+| `Router.routeCost()` returns `null` when no route exists. | Automated test: calculated the route cost from A to disconnected node E and checked that `null` was returned. | ✅ Passed. |
+| `Router.routeCost()` returns zero when start and end are the same node. | Automated test: calculated the route cost from A to A and checked that `0` was returned. | ✅ Passed. |
+| `Router.findShortestRoute()` chooses the route with the lowest total cost. | Automated test: compared the available routes from A to D and checked that A-C-D with total cost `7` was selected instead of A-B-D with cost `12`. | ✅ Passed. |
+| `Router.findShortestRoute()` works in the reverse direction. | Automated test: searched from D to A and checked that D-C-A with total cost `7` was returned. | ✅ Passed. |
+| `Router.findShortestRoute()` compares alternative weighted routes correctly. | Automated test: searched from C to B and checked that C-A-B with cost `9` was selected instead of C-D-B with cost `10`. | ✅ Passed. |
+| `Router.findShortestRoute()` handles identical start and end nodes. | Automated test: searched from A to A and checked that a one-node route with cost `0` was returned. | ✅ Passed. |
+| `Router.findShortestRoute()` returns `null` when no route exists. | Automated test: searched from A to disconnected node E and checked that `null` was returned. | ✅ Passed. |
+| `Router` rejects a start node ID that does not exist. | Automated test: attempted to find the shortest route starting from nonexistent node X and checked that an error was thrown. | ✅ Passed. |
+| `Router` rejects an end node ID that does not exist. | Automated test: attempted to find the shortest route to nonexistent node X and checked that an error was thrown. | ✅ Passed. |
 |                   |                    |         |
 

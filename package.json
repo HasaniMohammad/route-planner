@@ -1,7 +1,21 @@
 {
-  "name": "route-planner",
+  "name": "network-route-planner",
   "version": "1.0.0",
-  "description": "A JavaScript module for creating weighted networks and finding the routes between connected nodes",
+  "description": "A JavaScript module for creating weighted networks and finding routes between connected nodes.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": "./src/index.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HasaniMohammad/route-planner.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HasaniMohammad/route-planner/issues"
+  },
+  "homepage": "https://github.com/HasaniMohammad/route-planner#readme",
   "keywords": [
     "routing",
     "network",
@@ -9,19 +23,6 @@
     "pathfinding",
     "weighted-graph"
   ],
-  "homepage": "https://github.com/HasaniMohammad/route-planner#readme",
-  "bugs": {
-    "url": "https://github.com/HasaniMohammad/route-planner/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/HasaniMohammad/route-planner.git"
-  },
-  "license": "MIT",
   "author": "Mohammadullah Hasani",
-  "type": "module",
-  "main": "src/index.js",
-  "scripts": {
-    "test": "node --test"
-  }
+  "license": "MIT"
 }

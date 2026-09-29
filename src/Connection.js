@@ -16,8 +16,13 @@ export class Connection {
     }
 
     if (cost < 0) {
-      throw new Error('Cost must be a valid number.')
+      throw new Error('Cost cannot be negative.')
     }
+
+    if (typeof (cost) !== 'number' || Number.isNaN(cost)) {
+      throw new TypeError('Cost must be a valid number.')
+    }
+
 
     this.#startNode = startNode
     this.#endNode = endNode

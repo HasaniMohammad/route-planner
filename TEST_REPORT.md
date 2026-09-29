@@ -44,6 +44,14 @@ submitting):
 | `Node` rejects a non-string ID. | Automated unit test: attempted to create `new Node(123)` and checked that a `TypeError` was thrown. | ✅ Passed. |
 | `Node` rejects an empty string ID. | Automated unit test: attempted to create `new Node('')` and checked that an error was thrown. | ✅ Passed. |
 | `Node` rejects an ID containing only whitespace. | Automated unit test: attempted to create a Node with a whitespace-only ID and checked that an error was thrown. | ✅ Passed. |
+| `Connection` can be created with two valid `Node` instances and a valid cost. | Automated unit test: created two nodes and a connection with cost `10`, then checked its `startNode`, `endNode`, and `cost`. | ✅ Passed. |
+| `Connection` rejects a start node that is not a `Node` instance. | Automated unit test: passed a string as the start node and checked that a `TypeError` was thrown. | ✅ Passed. |
+| `Connection` rejects an end node that is not a `Node` instance. | Automated unit test: passed a string as the end node and checked that a `TypeError` was thrown. | ✅ Passed. |
+| `Connection` rejects a connection from a node to itself. | Automated unit test: passed the same `Node` instance as both the start and end node and checked that an error was thrown. | ✅ Passed. |
+| `Connection` rejects a cost that is not a number. | Automated unit test: passed the string `'10'` as the cost and checked that a `TypeError` was thrown. | ✅ Passed. |
+| `Connection` rejects `NaN` as a cost. | Automated unit test: passed `NaN` as the cost and checked that a `TypeError` was thrown. | ❌ The original validation only checked whether the cost was negative, so `NaN` was accepted. Added `Number.isNaN(cost)` to the validation. The test now passes. |
+| `Connection` rejects a negative cost. | Automated unit test: passed `-5` as the cost and checked that an error was thrown. | ✅ Passed. |
+| `Connection` accepts zero as a valid cost. | Automated unit test: created a connection with cost `0` and checked that its cost was stored correctly. | ✅ Passed. |
 |                   |                    |         |
 |                   |                    |         |
 |                   |                    |         |

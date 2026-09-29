@@ -62,5 +62,17 @@ submitting):
 | `Network` rejects a duplicate connection. | Automated unit test: connected A to B and then attempted to create the same connection again, checking that an error was thrown. | ✅ Passed. |
 | `Network` rejects a reversed duplicate connection. | Automated unit test: connected A to B and then attempted to connect B to A, checking that an error was thrown because connections are undirected. | ✅ Passed. |
 | `Network.getConnections()` returns all connections for a node. | Automated unit test: connected A to both B and C and checked that `getConnections('A')` returned two connections. | ✅ Passed. |
+| `Route` can be created with valid `Node` instances and a valid cost. | Automated unit test: created a route containing three nodes with cost `15` and checked that the nodes and cost were stored correctly. | ✅ Passed. |
+| `Route` rejects nodes that are not provided as an array. | Automated unit test: passed a string instead of an array of nodes and checked that a `TypeError` was thrown. | ✅ Passed. |
+| `Route` rejects an empty nodes array. | Automated unit test: attempted to create a route with an empty array and checked that an error was thrown. | ✅ Passed. |
+| `Route` rejects an array containing values that are not `Node` instances. | Automated unit test: passed an array containing a valid `Node` and a string and checked that a `TypeError` was thrown. | ✅ Passed. |
+| `Route` rejects a cost that is not a number. | Automated unit test: passed the string `'10'` as the route cost and checked that a `TypeError` was thrown. | ✅ Passed. |
+| `Route` rejects `NaN` as a cost. | Automated unit test: passed `NaN` as the route cost and checked that a `TypeError` was thrown. | ✅ Passed. |
+| `Route` rejects a negative cost. | Automated unit test: passed `-5` as the route cost and checked that an error was thrown. | ✅ Passed. |
+| `Route` accepts zero as a valid cost. | Automated unit test: created a route containing one node with cost `0` and checked that the cost was stored correctly. | ✅ Passed. |
+| `Route.numberOfStops` returns the number of nodes in the route. | Automated unit test: created a route containing three nodes and checked that `numberOfStops` returned `3`. | ✅ Passed. |
+| `Route.contains()` returns `true` for a node included in the route. | Automated unit test: created a route containing nodes A and B and checked that `contains(nodeB)` returned `true`. | ✅ Passed. |
+| `Route.contains()` returns `false` for a node not included in the route. | Automated unit test: created a route containing A and B and checked that `contains(nodeC)` returned `false`. | ✅ Passed. |
+| `Route.contains()` rejects a value that is not a `Node` instance. | Automated unit test: passed a string to `contains()` and checked that a `TypeError` was thrown. | ✅ Passed. |
 |                   |                    |         |
 

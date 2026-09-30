@@ -146,3 +146,83 @@ const cost = router.routeCost('A', 'D')
 console.log(cost)
 // 12
 ```
+
+## API Overview
+
+### Node
+
+Represents a node in the network.
+
+```js
+const node = new Node('A')
+```
+
+Each node must have a non-empty string ID.
+
+### Connection
+
+Represents a weighted connection between two nodes.
+
+Connections are created through the `Network.connect()` method. Connections
+are undirected, meaning that a connection from A to B can also be used to
+travel from B to A.
+
+### Network
+
+Stores and manages the nodes and connections.
+
+Main methods:
+
+- `addNode(node)` - Adds a node to the network.
+- `hasNode(id)` - Checks whether a node exists.
+- `getNode(id)` - Returns a node by its ID.
+- `connect(startId, endId, cost)` - Creates a weighted connection between two nodes.
+- `getConnections(id)` - Returns the connections associated with a node.
+
+### Router
+
+Searches for routes in a `Network`.
+
+Main methods:
+
+- `hasRoute(startId, endId)` - Checks whether a route exists.
+- `findRoute(startId, endId)` - Finds a valid route.
+- `findShortestRoute(startId, endId)` - Finds the route with the lowest total cost.
+- `routeCost(startId, endId)` - Returns the cost of a found route.
+
+### Route
+
+Represents a route returned by the router.
+
+A route provides:
+
+- `nodes` - The nodes included in the route.
+- `cost` - The total cost of the route.
+- `numberOfStops` - The number of nodes in the route.
+- `contains(node)` - Checks whether a specific node is part of the route.
+
+## Testing
+
+The module uses Node.js's built-in test runner and `node:assert/strict`.
+
+Run the automated tests with:
+
+```bash
+npm test
+```
+
+The tests cover the module's main classes and routing functionality, including
+input validation, disconnected nodes, route finding, and lowest-cost route
+selection.
+
+A summary of the performed tests and their results is available in
+[`TEST_REPORT.md`](TEST_REPORT.md).
+
+## Dependencies
+
+Route Planner has no external runtime dependencies.
+
+## License
+
+This project is licensed under the MIT License. See the
+[`LICENSE`](LICENSE) file for details.
